@@ -341,7 +341,7 @@ from ultralytics import YOLO
 import os
 
 # Load YOLO model using TensorRT engine
-model = YOLO("runs/detect/oscilloscope_jetson_<#>/weights/best.engine", task="detect")
+model = YOLO("/ultralytics/runs/detect/oscilloscope_jetson_<#>/weights/best.engine", task="detect")
 
 output_folder = "processed_frames"
 os.makedirs(output_folder, exist_ok=True)
