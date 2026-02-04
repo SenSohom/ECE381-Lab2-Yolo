@@ -220,7 +220,7 @@ Lab2-Workspace/
 
 > **Important:** For each dataset (Dataset-10, Dataset-25, Dataset-50), you will train the model **3 times** with different epoch values: **10, 30, and 50 epochs**. This means you will have a total of **9 training runs** (3 datasets × 3 epoch values). Replace the `epochs` parameter in the script accordingly.
 
-> Also replace `Dataset-<#>` with the actual dataset folder name (Dataset-10, Dataset-25, or Dataset-50) based on which dataset you are training.
+> Also replace `Dataset-<#>` with the actual dataset folder name (Dataset-10, Dataset-25, or Dataset-50) based on which dataset you are training. To create the python file follow the steps mentioned in your ppt. Then copy paste this code. 
 
 Create a file named `train_model.py`:
 ```python
@@ -232,8 +232,8 @@ results = model.train(
     epochs=100,
     imgsz=640,
     device=0,
-    workers=1,
-    batch=8,
+    workers=0,
+    batch=4,
     patience=30,
     save=True,
     project="runs/detect",
