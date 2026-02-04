@@ -274,4 +274,53 @@ python train_model.py
 | Training Time | | | |
 
 ---
+### Task 3.4: Inference on Trained Models
+**Objective:** Test the trained models on new images and record detection results.
 
+**Inference Script:**
+
+Create a file named `inference.py`:
+
+```python
+from ultralytics import YOLO
+
+# Load the trained TensorRT engine model (replace <#> with dataset number: 10, 25, or 50)
+model = YOLO("runs/detect/oscilloscope_jetson_<#>/weights/best.engine")
+
+# Run inference on webcam
+results = model.predict(source=0, conf=0.5)
+
+# Or run inference on a single image
+# results = model.predict(source="path/to/image.jpg", conf=0.5)
+```
+
+**Instructions:**
+
+1. Update the model path with your trained model (e.g., `oscilloscope_jetson_10`, `oscilloscope_jetson_25`, or `oscilloscope_jetson_50`)
+
+2. Run the inference script:
+```bash
+python inference.py
+```
+
+3. The script will open a webcam feed with real-time detections showing:
+   - Bounding boxes around detected objects
+   - Object class labels (Oscilloscope or Jetson)
+   - Confidence scores for each detection
+
+4. **Capture Screenshots:**
+   - Take at least **5 screenshots** for each trained model showing successful detections
+   - Make sure the screenshots clearly show:
+     - Object class names
+     - Confidence scores
+     - Bounding boxes
+   - Save screenshots with filenames: `inference_model_10_01.png`, `inference_model_10_02.png`, etc.
+
+5. **Include all screenshots in your lab report** with annotations explaining the detections and comparing performance across different dataset sizes.
+
+**Example Screenshot Naming Convention:**
+- `inference_model_10_01.png` - First screenshot from 10-image dataset model
+- `inference_model_25_03.png` - Third screenshot from 25-image dataset model
+- `inference_model_50_02.png` - Second screenshot from 50-image dataset model
+
+---
