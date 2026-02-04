@@ -304,7 +304,7 @@ model.export(format="engine")
 - For Dataset-25 training, replace `Dataset-<#>` with `Dataset-25` and `oscilloscope_jetson_<#>` with `oscilloscope_jetson_25`
 - For Dataset-50 training, replace `Dataset-<#>` with `Dataset-50` and `oscilloscope_jetson_<#>` with `oscilloscope_jetson_50`
 
-Then run the training:
+Then run the training. Make sure to close all the other applications before you start the training process, it includes your browsers, text editors etc, only your terminal should be open and nothing else:
 ```bash
 python train_model.py
 ```
