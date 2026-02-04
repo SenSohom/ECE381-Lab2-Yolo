@@ -417,3 +417,5 @@ python inference.py
 - `inference_model_50_02.png` - Second screenshot from 50-image dataset model
 
 ---
+
+## Lab Report Due Date : 20 Feb 2026
