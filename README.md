@@ -272,7 +272,7 @@ Lab2-Workspace/
 
 **Training Script Template:**
 
-> **Important:** For each dataset (Dataset-10, Dataset-25, Dataset-50), you will train the model **3 times** with different epoch values: **10, 30, and 50 epochs**. This means you will have a total of **9 training runs** (3 datasets × 3 epoch values). Replace the `epochs` parameter in the script accordingly.
+> **Important:** For each dataset (Dataset-10, Dataset-25, Dataset-50), you will train the model **3 times** with different epoch values: **25, 50, and 100 epochs**. This means you will have a total of **9 training runs** (3 datasets × 3 epoch values). Replace the `epochs` parameter in the script accordingly.
 
 > Also replace `Dataset-<#>` with the actual dataset folder name (Dataset-10, Dataset-25, or Dataset-50) based on which dataset you are training. To create the python file follow the steps mentioned in your ppt. Then copy paste this code. 
 
