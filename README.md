@@ -318,6 +318,7 @@ python train_model.py
 - Inference speed (ms per image)
 
 All these things will be printed in the terminal during the training phase for each epoch. Once the training is finished you can copy the metrics from the terminal, paste it in a txt file and then use the help of any AI tool to plot the curves and attach to your Lab Report.
+
 **Create a comparison table in your lab report:**
 
 | Metric | Dataset_10 | Dataset_25 | Dataset_50 |
