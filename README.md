@@ -103,17 +103,71 @@ This will:
 - Provide faster inference times (22-25ms per frame)
 
 ---
-
 ### Step 3: Run Object Detection Script
+
+**Create a file named `ObjectDetect.py`:**
+
+```python
+import cv2
+from ultralytics import YOLO
+import os
+
+# Load YOLO model using TensorRT engine
+model = YOLO("yolo11n.engine", task="detect")
+
+output_folder = "processed_frames"
+os.makedirs(output_folder, exist_ok=True)
+
+frame_counter = 0
+
+# Open webcam (0 for default webcam)
+cap = cv2.VideoCapture(0)
+
+while cap.isOpened():
+    ret, frame = cap.read()
+    if not ret:
+        break
+
+    # Run YOLO inference on the frame
+    results = model(frame)
+
+    # Process and visualize results
+    for result in results:
+        for box in result.boxes:
+            x1, y1, x2, y2 = map(int, box.xyxy[0])  # Bounding box coordinates
+            conf = box.conf[0].item()  # Confidence score
+            cls = int(box.cls[0])  # Class index
+            label = f"{model.names[cls]} {conf:.2f}"  # Class label with confidence
+
+            # Draw bounding box and label
+            cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+            cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 
+                        0.5, (0, 255, 0), 2)
+
+    # Display the frame
+    frame_filename = os.path.join(output_folder, f"frame_{frame_counter:04d}.jpg")
+    cv2.imshow("YOLOv11n Object Detection", frame)
+    #cv2.imwrite(frame_filename, frame)
+    frame_counter += 1
+
+    # Exit on 'q' key
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+# Release resources
+cap.release()
+cv2.destroyAllWindows()
+```
+**Run the script:**
 ```bash
 python ObjectDetect.py
 ```
 
 This will:
-- Load the YOLOv11n TensorRT model
-- Capture video from your webcam
-- Display real-time object detection with bounding boxes
-- Press 'q' to exit
+- Load the YOLOv11n TensorRT engine model
+- Capture video from your webcam in real-time
+- Display object detection with bounding boxes and confidence scores
+- Press 'q' to exit the application
 
 ---
 
