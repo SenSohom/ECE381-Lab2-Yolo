@@ -1,5 +1,31 @@
 # Lab-2 : YOLO Manual
 
+## ⚠️ IMPORTANT SETUP INSTRUCTIONS
+
+**Please DO NOT use Headless Mode** as it creates compatibility issues with display forwarding and GUI applications.
+
+### Before Starting the Lab:
+
+1. **Connect all peripherals to your Jetson Orin Nano:**
+   - Power cable
+   - DisplayPort (DP) cable
+   - Ethernet cable
+   - Keyboard & Mouse
+   - USB Webcam
+
+2. **Set Jetson to Maximum Power Mode:**
+   - Click the **power icon** in the **top-right corner** of the desktop
+   - Select **MAXN SUPER** power mode
+   - This ensures maximum performance for model training and inference
+
+**Power Mode Menu Reference:**
+
+![Power Mode Setup](power_mode_setup.jpg)
+
+> **Note:** These setup steps are crucial for proper operation of OpenCV GUI windows, webcam access, and optimal performance during training.
+
+---
+
 ## Part 1: Docker Setup
 
 ### Pre-Step: Open Terminal
@@ -50,16 +76,113 @@ apt-get install -y build-essential cmake git libgtk2.0-dev pkg-config libavcodec
 ```
 
 ### Step 5: Clone and Build OpenCV with GTK Support
+
+#### 5.1: Install Ninja Build System
+
+```bash
+apt install ninja-build
+```
+
+#### 5.2: Clone OpenCV Repository
+
 ```bash
 cd /tmp
 git clone --depth 1 https://github.com/opencv/opencv.git
+```
+
+#### 5.3: Navigate to OpenCV Directory and Create Build Folder
+
+```bash
 cd opencv
 mkdir build && cd build
-cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_GTK=ON ..
-make -j4
-make install
+```
+
+#### 5.4: Configure OpenCV with CMake
+
+```bash
+cmake -G Ninja \
+  -D CMAKE_BUILD_TYPE=Release \
+  -D CMAKE_INSTALL_PREFIX=/usr/local \
+  -D WITH_GTK=ON \
+  ..
+```
+
+#### 5.5: Compile OpenCV with Ninja
+
+```bash
+ninja -j$(nproc)
+```
+
+> **Note:** This step will take some time as it compiles OpenCV with all available CPU cores. The `$(nproc)` command automatically detects the number of available processor cores.
+
+#### 5.6: Install OpenCV
+
+```bash
+ninja install
+```
+
+#### 5.7: Update Library Cache
+
+```bash
 ldconfig
 ```
+
+> **Note:** This command updates the system's library cache to recognize the newly installed OpenCV libraries.
+
+---
+
+### Step 6: Save Docker Changes and Create Custom Image
+
+**Objective:** Save all the changes made to the Docker container (OpenCV, display libraries, and dependencies) as a new custom Docker image for future use.
+
+#### 6.1: Open a New Terminal
+
+Open a **new terminal window** on your Jetson Orin Nano (do not close the current Docker container terminal yet).
+
+#### 6.2: List Active Docker Containers
+
+Run the following command to see all active Docker containers:
+
+```bash
+sudo docker ps -a
+```
+
+This will return a list of Docker containers. The **first entry** is your latest container where all the changes have been made. **Copy the Container ID** from the output.
+
+#### 6.3: Commit the Container to Create a New Image
+
+Execute the following command, replacing `<Container-ID>` with the ID you copied:
+
+```bash
+sudo docker commit <Container-ID> ultralytics-opencv:jetson-jetpack6
+```
+
+**Example:** If your Container ID is `a1b2c3d4e5f6`, the command would be:
+```bash
+sudo docker commit a1b2c3d4e5f6 ultralytics-opencv:jetson-jetpack6
+```
+
+Once the command executes successfully, you will see a response confirming the commit.
+
+#### 6.4: Close Both Terminals
+
+After the commit is complete, close both the Docker container terminal and the new terminal you just opened.
+
+#### 6.5: Use the Custom Image for Future Sessions
+
+From now on, you can skip all the installation steps (Steps 3, 4, and 5) and directly launch the Docker container with your custom image using:
+
+```bash
+sudo docker run -it --ipc=host --runtime=nvidia --device=/dev/video0 \
+  -v /home/ece381-<kit#>/Documents/Lab2-Workspace:/workspace \
+  -e DISPLAY=$DISPLAY \
+  -v /tmp/.X11-unix:/tmp/.X11-unix \
+  ultralytics-opencv:jetson-jetpack6 bash
+```
+
+> **Note:** Replace `<kit#>` with your kit number (same as before).
+
+This custom image includes all the necessary libraries (OpenCV with GTK support, display libraries, and build dependencies), so you won't need to reinstall them in future sessions.
 
 ---
 
