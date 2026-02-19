@@ -25,3 +25,20 @@
 > **Note:** These setup steps are crucial for proper operation of OpenCV GUI windows, webcam access, and optimal performance during training.
 
 ---
+
+---
+
+## Step 1: System Update
+
+Open a terminal and run the following commands to update the system:
+```bash
+sudo apt update
+sudo apt upgrade
+```
+
+When prompted, enter the machine password:
+```
+jetson
+```
+
+> **Note:** The upgrade step may take a few minutes depending on the number of packages to update. Wait for it to complete fully before proceeding.
