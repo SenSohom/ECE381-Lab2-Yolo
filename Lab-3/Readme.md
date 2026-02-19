@@ -297,3 +297,31 @@ This transfers the output image to your Jetson home directory where you can open
 |---|---|---|---|
 | a human face | | | |
 
+**Step 4:** Repeat Steps 1 and 2 for 4 more different objects present near you (e.g., a laptop, a water bottle, a chair, a backpack).
+
+For each object, you will need to update the `prompts` section of `attention_heatmap.py`. Open the file in nano:
+```bash
+nano attention_heatmap.py
+```
+
+Scroll down to the prompts section and replace `"a human face"` with the object you want to detect:
+
+![Prompts Section](ss.png)
+
+Save the file with `Ctrl+X`, then `Y`. Run the script again:
+```bash
+python3 attention_heatmap.py
+```
+
+Once you see `Saved to attention_output.png`, export the image to your home folder from the second terminal:
+```bash
+sudo docker cp $(sudo docker ps -q):/opt/nanoowl/examples/tree_demo/attention_output.png ~/
+```
+
+> **Note:** Rename each exported image before running the next experiment, otherwise it will be overwritten. For example:
+> ```bash
+> mv ~/attention_output.png ~/attention_laptop.png
+> ```
+
+Add a new row to your results table for each object. In total there will be 5 entries after completion of Part-1.
+
