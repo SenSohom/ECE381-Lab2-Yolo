@@ -39,6 +39,8 @@ When prompted, enter the machine password:
 machinelearning<kit#>
 ```
 
+Once the update is done, please restart your Jetson.
+
 > **Note:** The upgrade step may take a few minutes depending on the number of packages to update. Wait for it to complete fully before proceeding.
 ---
 
