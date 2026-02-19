@@ -26,8 +26,6 @@
 
 ---
 
----
-
 ## Step 1: System Update
 
 Open a terminal and run the following commands to update the system:
