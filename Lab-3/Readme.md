@@ -325,3 +325,205 @@ sudo docker cp $(sudo docker ps -q):/opt/nanoowl/examples/tree_demo/attention_ou
 
 Add a new row to your results table for each object. In total there will be 5 entries after completion of Part-1.
 
+---
+
+### Part 2 — Prompt Engineering Experiments
+
+In this part you will run systematic experiments by varying the text prompt and observing how the model responds. For each experiment, update the `prompts` section of `attention_heatmap.py`, run the script, export the output, and record your results in the tables below.
+
+---
+
+#### Experiment A: Specificity Ladder
+
+Run the same scene through increasingly specific prompts. Keep the webcam pointed at your face for all 5 runs.
+
+| Prompt | Detection Score | Box Location | Heatmap Concentration |
+|---|---|---|---|
+| "an object" | | | |
+| "a person" | | | |
+| "a face" | | | |
+| "a human face with glasses" | | | |
+| "a male face with glasses and a beard" | | | |
+
+**Question:** As the prompt becomes more specific, does the detection score go up or down? Does the heatmap shift? Write 2-3 sentences explaining what you observe.
+
+---
+
+#### Experiment B: Wrong Prompts
+
+Keep the webcam pointed at your face but deliberately use incorrect prompts — objects that are not present in the scene.
+
+| Prompt | Detection Score | Box Location (correct / incorrect / none) | Heatmap Concentration |
+|---|---|---|---|
+| "a dog" | | | |
+| "a car" | | | |
+| "a chair" | | | |
+
+**Question:** Does the model still return a bounding box even when the prompt is completely wrong? Where does it land and what does the heatmap look like? What does this tell you about how the model handles uncertainty?
+
+---
+
+#### Experiment C: Adversarial Prompts
+
+These prompts are designed to conflict with what is actually in the scene. Keep the webcam pointed at your face.
+
+| Prompt | Detection Score | Box Location | Heatmap Concentration |
+|---|---|---|---|
+| "a face but not wearing glasses" | | | |
+| "a happy face" | | | |
+| "a sad face" | | | |
+
+> **Note:** For the happy vs sad comparison, keep the same neutral expression for both runs so the only variable is the prompt.
+
+**Question:** Does the score change between "a happy face" and "a sad face" on the same neutral expression? Does the heatmap shift between the two? What does this reveal about how the text encoder interprets emotional attributes?
+
+Repeat these experiments for each of the 5 entries from Part-1. The example is shown here for your first entry 'a face'. You have to design and change the prompts for the next 4 entries. At the end of Part-2 you should have Two different tables, Table-1 from Part-1 consisting of 5 entries and Table-2 from Part-2 consisting of 55 entries (11 for each).
+
+---
+
+### Part 3 — Tree Prompt Design & Failure Mode Documentation
+
+This part has two connected activities. First you will design a hierarchical tree prompt to describe a complex scene, then you will deliberately stress-test the model to document where and why it fails.
+
+---
+
+#### Activity A: Tree Prompt Design
+
+Using the tree_demo browser interface, your task is:
+
+> *"Build a tree prompt that can describe a person sitting at a desk in enough detail that someone who couldn't see the image could reconstruct the scene."*
+
+You are expected to iterate — start simple and progressively refine your tree until you are satisfied with the level of detail the model can detect. Here is an example progression to get you started:
+```
+[a person]                                                          # too simple
+[a person, [sitting, standing]]                                     # adds pose
+[a person, [sitting, standing], [a desk, a chair, a laptop]]        # adds context
+```
+
+For each iteration, record your tree prompt string and take a screenshot of the browser output. You will need at least **3 iterations** showing your refinement process.
+
+| Iteration | Tree Prompt String | What was detected | What was missed |
+|---|---|---|---|
+| 1 | | | |
+| 2 | | | |
+| 3 | | | |
+
+**Deliverable:** Your final tree prompt string + a screenshot of the browser output + a short paragraph explaining why you structured the tree the way you did and what you would change if you had more time.
+
+---
+
+#### Activity B: Failure Mode Documentation
+
+Now deliberately try to break the model using `attention_heatmap.py`. For each test, update the prompt to `"a human face"`, run the script, export the image, and record your observations.
+
+| Test | Condition | Detection Score | Box Location | Hypothesis for why it failed |
+|---|---|---|---|---|
+| Occlusion | Cover half your face with your hand | | | |
+| Lighting | Point phone flashlight directly at camera | | | |
+| Lighting | Dim the room lights as much as possible | | | |
+| Distance | Sit as close as possible to the camera | | | |
+| Distance | Sit at medium distance (~1m) | | | |
+| Distance | Sit far from the camera (~3m) | | | |
+| Multi-person | Two students in frame | | | |
+| Rotation | Tilt head 45 degrees | | | |
+| Rotation | Tilt head 90 degrees | | | |
+
+**Question 1:** At what distance did the score drop below 0.5? Did the heatmap change before the score dropped?
+
+**Question 2:** Which failure surprised you the most and why?
+
+**Question 3:** For any two tests above, predict how a CNN-based detector like YOLOv8 would behave differently under the same condition, based on what you know about how CNNs build their representations compared to ViT.
+
+
+---
+
+## Lab Report Deliverables
+
+Your lab report must be submitted as a single PDF by **March 6, 2026**. It should contain the following sections in order:
+
+---
+
+### Section 1 — Baseline & Object Detection (Part 1)
+
+**Table 1:** Results for 5 objects including your face and 4 objects from your surroundings.
+
+| # | Prompt | Detection Score | Box Location | Heatmap Concentration |
+|---|---|---|---|---|
+| 1 | a human face | | | |
+| 2 | | | | |
+| 3 | | | | |
+| 4 | | | | |
+| 5 | | | | |
+
+**Images:** Include the exported `attention_output.png` for each of the 5 entries. Label each image clearly with the prompt used.
+
+---
+
+### Section 2 — Prompt Engineering Experiments (Part 2)
+
+**Table 2:** Results for all 5 objects across all 3 experiments (Specificity Ladder, Wrong Prompts, Adversarial Prompts) — 11 rows per object, 55 rows total.
+
+| # | Object | Experiment | Prompt | Detection Score | Box Location | Heatmap Concentration |
+|---|---|---|---|---|---|---|
+| 1 | face | Specificity | "an object" | | | |
+| 2 | face | Specificity | "a person" | | | |
+| 3 | face | Specificity | "a face" | | | |
+| 4 | face | Specificity | "a human face with glasses" | | | |
+| 5 | face | Specificity | "a male face with glasses and a beard" | | | |
+| 6 | face | Wrong | "a dog" | | | |
+| 7 | face | Wrong | "a car" | | | |
+| 8 | face | Wrong | "a chair" | | | |
+| 9 | face | Adversarial | "a face but not wearing glasses" | | | |
+| 10 | face | Adversarial | "a happy face" | | | |
+| 11 | face | Adversarial | "a sad face" | | | |
+| ... | object 2 | ... | ... | | | |
+
+**Images:** Include at least one representative `attention_output.png` per experiment per object (minimum 15 images).
+
+**Written Answers:** Answer the following questions based on your Table 2 results:
+
+1. As the prompt becomes more specific, does the detection score go up or down? Does the heatmap shift? *(2-3 sentences)*
+2. Does the model still return a bounding box when the prompt is completely wrong? What does this tell you about how the model handles uncertainty? *(2-3 sentences)*
+3. Does the score change between "a happy face" and "a sad face" on the same neutral expression? What does this reveal about how the text encoder interprets emotional attributes? *(2-3 sentences)*
+
+---
+
+### Section 3 — Tree Prompt Design & Failure Mode Documentation (Part 3)
+
+**Table 3A — Tree Prompt Iterations:**
+
+| Iteration | Tree Prompt String | What was detected | What was missed |
+|---|---|---|---|
+| 1 | | | |
+| 2 | | | |
+| 3 | | | |
+
+**Deliverables for Activity A:**
+- Screenshot of your final tree prompt output in the browser
+- A short paragraph (5-7 sentences) explaining why you structured the tree the way you did and what you would change if you had more time
+
+**Table 3B — Failure Mode Results:**
+
+| Test | Condition | Detection Score | Box Location | Hypothesis for why it failed |
+|---|---|---|---|---|
+| Occlusion | Cover half your face with your hand | | | |
+| Lighting | Phone flashlight directly at camera | | | |
+| Lighting | Dim the room lights | | | |
+| Distance | As close as possible | | | |
+| Distance | ~1m away | | | |
+| Distance | ~3m away | | | |
+| Multi-person | Two students in frame | | | |
+| Rotation | 45 degrees | | | |
+| Rotation | 90 degrees | | | |
+
+**Images:** Include the exported `attention_output.png` for each failure mode test (9 images).
+
+**Written Answers:**
+
+1. At what distance did the score drop below 0.5? Did the heatmap change before the score dropped? *(2-3 sentences)*
+2. Which failure surprised you the most and why? *(2-3 sentences)*
+3. For any two failure tests, predict how YOLOv8 would behave differently under the same condition based on what you know about CNN vs ViT architectures. *(4-5 sentences)*
+
+---
+
+## Lab Report Deadline : 6 March 2026
