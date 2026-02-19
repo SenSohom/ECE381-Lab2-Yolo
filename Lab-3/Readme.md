@@ -157,6 +157,8 @@ Record the following in your lab notebook:
 - Detection score displayed on the bounding box
 - Which region of the image the box covers
 
+After that, close the browser, go back to your terminal and press `Ctrl + C` to stop the code. 
+
 **Step 2:** Now we will run the attention heatmap script to visualize what the model is focusing on. Copy the following code:
 ```python
 import torch
