@@ -126,7 +126,7 @@ The model (`apple/FastVLM-0.5B`) is downloaded from HuggingFace during training 
 
 ### Add the token to the job script
 
-Open `wulver_job.sh` and paste your token here:
+Open `job.sh` and paste your token here:
 
 ```bash
 export HF_TOKEN="hf_xxxxxxxxxxxxxxxxxxxxxxxx"
@@ -196,41 +196,68 @@ Before running on Wulver, update the following paths in each file:
 | `finetune.py` | `DATA_DIR` | Same as `OUTPUT_DIR` above |
 | `finetune.py` | `CKPT_DIR` | Where the trained LoRA adapter will be saved |
 | `inference.py` | `CKPT_DIR` | Same as `CKPT_DIR` above |
-| `wulver_job.sh` | `PROJECT_DIR` | Path to this `Code-FineTune` folder on Wulver |
-| `wulver_job.sh` | `HF_TOKEN` | Your HuggingFace token |
-| `wulver_job.sh` | `PARTITION_NAME` | Wulver GPU partition (run `sinfo` to find it) |
-| `wulver_job.sh` | `GPU_TYPE` | GPU type on Wulver (e.g. `a100`, `v100`) |
+| `job.sh` | `HF_TOKEN` | Your HuggingFace token |
 
 ---
 
 ## How to Run
 
-### 1. Set up the environment (once, interactively on Wulver)
+### Step 1 — Navigate to your course directory
+
+After logging in to Wulver, go to your personal course directory (replace `UCID` with your actual UCID):
 
 ```bash
-module load anaconda3
-conda create -n fastvlm python=3.11 -y
-conda activate fastvlm
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+cd /course/2026/spring/ece/381/th36/UCID
+```
+
+---
+
+### Step 2 — Load modules
+
+```bash
+module load Miniforge3/24.11.3-0
+module load CUDA/12.6.0
+```
+
+---
+
+### Step 3 — Create and activate the conda environment *(once only)*
+
+Do this only the first time. Skip to Step 4 on subsequent runs.
+
+```bash
+conda create -n fine-tune python=3.10 -y
+conda activate fine-tune
 pip install -r requirements.txt
 ```
 
-### 2. Submit the job
+For all future sessions, just activate the existing environment:
 
 ```bash
-sbatch wulver_job.sh
+conda activate fine-tune
 ```
 
-### 3. Monitor progress
+---
+
+### Step 4 — Submit the job
+
+```bash
+sbatch job.sh
+```
+
+---
+
+### Step 5 — Monitor progress
 
 ```bash
 squeue -u $USER                          # check job status
-tail -f logs/<job_id>_train.out          # live training log
+tail -f gpu_job.<job_id>.out             # live training log
 ```
 
-### 4. Run inference after training
+---
+
+### Step 6 — Run inference after training
 
 ```bash
 python inference.py /path/to/test_sequence/
 ```
-
