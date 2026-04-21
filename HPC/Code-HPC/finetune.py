@@ -178,7 +178,7 @@ def load_model_and_processor():
     else:
         model = AutoModelForCausalLM.from_pretrained(
             MODEL_ID,
-            torch_dtype=torch.float16,
+            torch_dtype=torch.float32,
             device_map="auto",
             trust_remote_code=True,
             token=HF_TOKEN,
@@ -224,7 +224,7 @@ def main():
         learning_rate=2e-4,
         warmup_ratio=0.05,
         lr_scheduler_type="cosine",
-        fp16=True,
+        fp16=False,
         eval_strategy="epoch",
         save_strategy="epoch",
         save_total_limit=2,
