@@ -8,7 +8,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --gres=gpu:a100_10g:1
-#SBATCH --time=59:00  # D-HH:MM:SS
+#SBATCH --time=48:00:00  # D-HH:MM:SS
 #SBATCH --mem-per-cpu=4000M
 
 module load Miniforge3/24.11.3-0
