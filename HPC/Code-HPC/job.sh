@@ -14,7 +14,7 @@
 module load Miniforge3/24.11.3-0
 module load CUDA/12.6.0
 
-cd /course/2026/spring/ece/381/th36/$LOGNAME
+cd /course/2026/spring/ece/381/th36/ucid
 
 conda activate fine-tune
 python prepare_dataset.py
