@@ -230,7 +230,7 @@ def main():
         save_total_limit=2,
         load_best_model_at_end=True,
         logging_steps=20,
-        dataloader_num_workers=4,
+        dataloader_num_workers=1,
         report_to="none",
         remove_unused_columns=False,
     )
