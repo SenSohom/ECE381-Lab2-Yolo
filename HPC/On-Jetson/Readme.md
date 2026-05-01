@@ -155,58 +155,6 @@ cat /etc/nv_tegra_release
 
 The output should show `REVISION: 4.4`.
 
-```bash
-python3 << 'EOF'
-import torch
-x = torch.zeros(400_000_000, dtype=torch.float16, device='cuda')
-print(f"Allocated {x.nbytes/1024**3:.2f} GB - allocator OK")
-del x
-EOF
-```
-
-Expected output:
-
-```text
-Allocated 0.75 GB - allocator OK
-```
-
-Only continue after this test passes.
-
-## 2. Free Memory on the Jetson
-
-The Jetson Orin Nano uses unified memory, which means the CPU and GPU share the
-same 8 GB memory pool. If background programs use too much RAM, the model may
-run out of GPU memory.
-
-Run these commands on the Jetson host before starting Docker:
-
-```bash
-free -h
-tegrastats
-```
-
-If you are using a desktop environment, stop the display manager to free memory:
-
-```bash
-sudo systemctl stop gdm3
-sudo systemctl stop lightdm
-```
-
-Set the Jetson to maximum performance:
-
-```bash
-sudo nvpmodel -m 0
-sudo jetson_clocks
-```
-
-Check memory again:
-
-```bash
-free -h
-```
-
-Target: at least 5 GB available before launching Docker.
-
 ## 3. Launch the Docker Container
 
 Run this on the Jetson host:
