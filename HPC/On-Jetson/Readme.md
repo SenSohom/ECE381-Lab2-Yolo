@@ -329,7 +329,7 @@ pip install \
   timm==1.0.15 \
   shortuuid \
   pydantic \
-  huggingface-hub==0.23.4 \
+  huggingface-hub==0.24.0 \
   pillow \
   markdown2
 ```
